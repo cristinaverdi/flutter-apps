@@ -31,6 +31,12 @@ class RandomWordsState extends State<RandomWords> {
         title: Center(
           child: Text('Startup Name Generator'),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: _pushFavourites,
+          ),
+        ],
       ),
       body: _buildSuggestions(),
     );
@@ -70,6 +76,42 @@ class RandomWordsState extends State<RandomWords> {
             _favourites.add(pair);
           }
         });
+      },
+    );
+  }
+
+  void _pushFavourites() {
+    Navigator.of(context).push(_route());
+  }
+
+  MaterialPageRoute _route() {
+    return MaterialPageRoute<void>(
+      // Add 20 lines from here...
+      builder: (BuildContext context) {
+        final Iterable<ListTile> tiles = _favourites.map(
+          (WordPair pair) {
+            return ListTile(
+              title: Text(
+                pair.asPascalCase,
+                style: _biggerFont,
+              ),
+            );
+          },
+        );
+        final List<Widget> divided = ListTile.divideTiles(
+          context: context,
+          tiles: tiles,
+        ).toList();
+        return Scaffold(
+          appBar: AppBar(
+              backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+              title: Center(
+                child: Text('Saved Suggestions'),
+              )),
+          body: ListView(
+            children: divided,
+          ),
+        );
       },
     );
   }

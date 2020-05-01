@@ -81,38 +81,88 @@ class RandomWordsState extends State<RandomWords> {
   }
 
   void _pushFavourites() {
-    Navigator.of(context).push(_route());
+    var navigator = Navigator.of(context);
+    navigator.push(_favouritesRoute());
   }
 
-  MaterialPageRoute _route() {
+  MaterialPageRoute _loginRoute() {
+    return MaterialPageRoute<void>(builder: (BuildContext context) {
+      return _loginPage();
+    });
+  }
+
+  Scaffold _loginPage() {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter a search term'),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _pushLogin() {
+    var navigator = Navigator.of(context);
+    navigator.push(_loginRoute());
+  }
+
+  MaterialPageRoute _favouritesRoute() {
     return MaterialPageRoute<void>(
       // Add 20 lines from here...
       builder: (BuildContext context) {
         final Iterable<ListTile> tiles = _favourites.map(
-          (WordPair pair) {
-            return ListTile(
-              title: Text(
-                pair.asPascalCase,
-                style: _biggerFont,
-              ),
-            );
-          },
+          mountTiles,
         );
-        final List<Widget> divided = ListTile.divideTiles(
-          context: context,
-          tiles: tiles,
-        ).toList();
-        return Scaffold(
-          appBar: AppBar(
-              backgroundColor: Color.fromRGBO(0, 0, 0, 1),
-              title: Center(
-                child: Text('Saved Suggestions'),
-              )),
-          body: ListView(
-            children: divided,
-          ),
-        );
+        return favouritesPage(favouritesTiles(context, tiles));
       },
+    );
+  }
+
+  ListTile mountTiles(WordPair pair) {
+    return ListTile(
+      title: Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+    );
+  }
+
+  List<Widget> favouritesTiles(BuildContext context, Iterable<ListTile> tiles) {
+    return ListTile.divideTiles(
+      context: context,
+      tiles: tiles,
+    ).toList();
+  }
+
+  Scaffold favouritesPage(List<Widget> divided) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+        title: Center(
+          child: Text('Saved Suggestions'),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: _pushLogin,
+          ),
+        ],
+      ),
+      body: ListView(
+        children: divided,
+      ),
     );
   }
 }

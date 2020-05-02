@@ -10,13 +10,7 @@ class _LoginScreenState extends State<LoginScreen> {
     BackGroundWithGradientBuilder _backGroundWithGradientBuilder =
     BackGroundWithGradientBuilder();
 
-    List<double> _stops = [0.1, 0.4, 0.7, 0.9];
-    List<Color> _colors = [
-        Color(0xFFDAEEDC),
-        Color(0xFFCEE8CE),
-        Color(0xFFB8D9C0), // 0xFFCEE8CE
-        Color(0xFF82A684),
-    ];
+
 
 
     @override
@@ -26,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Stack(
                     children: <Widget>[
                         _backGroundWithGradientBuilder
-                            .decoration(spotsDecoration(_colors, _stops))
+                            .decoration(spotsDecoration())
                             .build()
                     ],
                 ),
@@ -34,13 +28,21 @@ class _LoginScreenState extends State<LoginScreen> {
         );
     }
 
-    BoxDecoration spotsDecoration(List<Color> colors, List<double> stops) {
+    BoxDecoration spotsDecoration() {
+        List<double> _stops = [0.1, 0.4, 0.7, 0.9];
+        List<Color> _colors = [
+            Color(0xFFDAEEDC),
+            Color(0xFFCEE8CE),
+            Color(0xFFB8D9C0), // 0xFFCEE8CE
+            Color(0xFF82A684),
+        ];
+
         return BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: colors,
-                stops: stops,
+                colors: _colors,
+                stops: _stops,
           ),
       );
     }
